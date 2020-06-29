@@ -22,8 +22,28 @@ function currentWeather() {
     $(".humidity").text("Humidity: " + humidity + "%");
     var windSpeed = response.wind.speed;
     $(".windSpeed").text("Wind Speed: " + windSpeed + "MPH");
+
+    var lat = response.coord.lat
+    var lon = response.coord.lon
+    var uvIndexQueryUrl = "https://api.openweathermap.org/data/2.5/uvi?appid=61f00a845310c4a4251fd6bfc588f89b&lat="+lat+"&lon="+lon
+    $.ajax({
+        url: uvIndexQueryUrl,
+        method: "GET"
+    }).then(function(data){
+        console.log(data);
+        var uvIndex = data.value
+        
+        if (uvIndex > 0 && uvIndex < 4){
+           $(".UVIndex").text("UV Index: " + uvIndex).css("background","green");
+        } else if (uvIndex > 4 && uvIndex < 7){
+            $(".UVIndex").text("UV Index: " + uvIndex).css("background","yellow");
+        } else {
+            $(".UVIndex").text("UV Index: " + uvIndex).css("background","red");
+        }
+    })
   })
 };
+
 
 searchBtn.click(forecast);
 function forecast (){
@@ -68,3 +88,4 @@ function forecast (){
         $(".humidityFive").text("Humidity: " + humidityFive +"%");
     })
 }
+
